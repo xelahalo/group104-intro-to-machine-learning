@@ -16,7 +16,8 @@ y_time = data['time'].to_numpy()
 N = len(y_outcome)
 
 # separating the two y vectors from the data
-X_ = data.iloc[:, 3:].to_numpy()
+pandasX = data.iloc[:, 3:]
+X_ = pandasX.to_numpy()
 X = (X_ - X_.mean(0)) / X_.std(0)
 
 U,S,V = linalg.svd(X, full_matrices=False)
@@ -29,9 +30,13 @@ rho = (S*S) / (S*S).sum()
 Z = X @ V
 
 standard_deviation(X_, headers[3:])
+boxplot_summary(pandasX)
 explain_variance(rho, n_comp=30)
 scatter_pca(Z, y_outcome, C, classNames)
+normal_dist(pandasX)
+
+colors = ['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999']
 for i in range(3):
     j = i*3
-    coefficients(V, [j, j+1, j+2], X.shape[1], headers[3:])
+    coefficients(V, [j, j+1, j+2], X.shape[1], headers[3:], colors[j:j+3], i == 2, i == 0)
     
